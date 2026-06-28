@@ -1,0 +1,63 @@
+TOPIC
+    about_GovUKNotify
+
+SHORT DESCRIPTION
+    A community PowerShell client for the GOV.UK Notify REST API.
+
+LONG DESCRIPTION
+    The GovUKNotify module lets you send emails, text messages and letters through GOV.UK Notify,
+    attach files, generate template previews, and retrieve message status and inbound text
+    messages. It handles JSON Web Token authentication, transient-error retries and rate limiting
+    for you.
+
+    A GOV.UK Notify API key has the format:
+
+        {key_name}-{service_id}-{secret_key}
+
+    where service_id and secret_key are UUIDs. The module derives the service id and signing secret
+    from the key and generates a short-lived JWT for each request. The key is held in memory only;
+    it is never written to disk or logged.
+
+    CONNECTING
+
+    Connect once for the session, then call any cmdlet:
+
+        Connect-GovUKNotify -ApiKey $env:GOVUKNOTIFY_API_KEY
+        Send-GovUKNotifyEmail -EmailAddress 'amala@example.com' -TemplateId $tid
+
+    Or pass -ApiKey (and optionally -BaseUrl) to any cmdlet to override the connected session, which
+    is useful when working with more than one Notify service.
+
+    CMDLETS
+
+        Connect-GovUKNotify                 Store an API key for the session.
+        Disconnect-GovUKNotify              Clear the stored API key.
+        Get-GovUKNotifyContext              Show the current connection (key masked).
+        Send-GovUKNotifyEmail               Send an email from a template.
+        Send-GovUKNotifySms                 Send a text message from a template.
+        Send-GovUKNotifyLetter              Send a letter from a template.
+        Send-GovUKNotifyPrecompiledLetter   Send a precompiled PDF letter.
+        New-GovUKNotifyFileAttachment       Build a "file by email" object for personalisation.
+        Get-GovUKNotifyNotification         Get one message, or a filtered/paginated list.
+        Get-GovUKNotifyLetterPdf            Download a letter's PDF.
+        Get-GovUKNotifyTemplate             Get one template, a version, or all templates.
+        Get-GovUKNotifyTemplatePreview      Render a template with personalisation.
+        Get-GovUKNotifyReceivedText         Get inbound text messages.
+
+    ERROR HANDLING
+
+    Cmdlets throw a terminating error when GOV.UK Notify rejects a request. The message includes the
+    HTTP status code and the Notify error type, which are stable and safe to branch on. Transient
+    failures (HTTP 429, 500, 502, 503, 504) are retried automatically with exponential backoff.
+
+EXAMPLES
+    Connect-GovUKNotify -ApiKey $key
+    Send-GovUKNotifyEmail -EmailAddress 'amala@example.com' -TemplateId $tid -Personalisation @{ first_name = 'Amala' }
+    Get-GovUKNotifyNotification -TemplateType email -Status delivered -All
+
+KEYWORDS
+    GOV.UK Notify Email SMS Letter Notifications GDS
+
+SEE ALSO
+    https://docs.notifications.service.gov.uk/rest-api.html
+    https://github.com/deanlongstaff/GOV.UK.Notify
