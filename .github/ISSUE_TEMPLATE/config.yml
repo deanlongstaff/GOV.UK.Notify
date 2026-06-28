@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: GOV.UK Notify REST API documentation
+    url: https://docs.notifications.service.gov.uk/rest-api.html
+    about: Reference documentation for the underlying GOV.UK Notify REST API.
+  - name: Security vulnerability
+    url: https://github.com/deanlongstaff/GOV.UK.Notify/security/advisories/new
+    about: Please report security vulnerabilities privately, not as a public issue.
